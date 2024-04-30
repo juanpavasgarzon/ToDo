@@ -6,7 +6,7 @@ public class Repository : IRepository
 {
     private readonly Dictionary<string, List<IEntity>> _context = new();
 
-    private List<TEntity> GetEntityContext<TEntity>()
+    private List<IEntity> GetEntityContext<TEntity>() where TEntity : class, IEntity
     {
         var name = typeof(TEntity).Name;
         if (!_context.ContainsKey(name))
@@ -14,58 +14,52 @@ public class Repository : IRepository
             _context[name] = [];
         }
 
-        return _context[name].Cast<TEntity>().ToList();
+        return _context[name];
     }
 
     public TEntity Add<TEntity>(TEntity entity) where TEntity : class, IEntity
     {
         var context = GetEntityContext<TEntity>();
-        var type = entity.Id.GetType();
-
-        object? id = null;
-        if (type == typeof(int))
-        {
-            id = entity.Id = context.Count + 1;
-        }
-
-        if (type == typeof(string))
-        {
-            id = Guid.NewGuid().ToString();
-        }
-
-        entity.Id = id ?? throw new Exception("The Id Could Not Be Generated");
+        entity.Id = context.Count + 1;
         context.Add(entity);
         return entity;
     }
 
-    public TEntity AddWithoutId<TEntity>(TEntity entity) where TEntity : class, IEntity
+    public bool Update<TEntity>(TEntity entity) where TEntity : class, IEntity
     {
         var context = GetEntityContext<TEntity>();
+        var original = context.Find(x => x.Id.Equals(entity.Id));
+        if (original is null)
+        {
+            return false;
+        }
+
+        context.Remove(entity);
         context.Add(entity);
-        return entity;
+        return true;
     }
 
-    public TEntity? GetById<TEntity, TKey>(TKey key) where TEntity : class, IEntity
+    public TEntity? GetById<TEntity>(int key) where TEntity : class, IEntity
     {
         var context = GetEntityContext<TEntity>();
         var entity = context.Find(x => x.Id.Equals(key));
-        return entity;
+        return entity as TEntity;
     }
 
     public List<TEntity> GetBy<TEntity>(Predicate<TEntity> predicate) where TEntity : class, IEntity
     {
         var context = GetEntityContext<TEntity>();
         var entities = context.FindAll((Predicate<IEntity>)predicate);
-        return entities;
+        return entities.OfType<TEntity>().ToList();
     }
 
     public List<TEntity> GetAll<TEntity>() where TEntity : class, IEntity
     {
         var entities = GetEntityContext<TEntity>();
-        return entities;
+        return entities.OfType<TEntity>().ToList();
     }
 
-    public bool RemoveById<TEntity, TKey>(TKey key) where TEntity : class, IEntity
+    public bool RemoveById<TEntity>(int key) where TEntity : class, IEntity
     {
         var context = GetEntityContext<TEntity>();
         var entity = context.Find(x => x.Id.Equals(key));

@@ -13,6 +13,7 @@ builder.Services.AddCommands();
 builder.Services.AddQueries();
 builder.Services.AddEndpoints();
 builder.Services.AddRepository();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 

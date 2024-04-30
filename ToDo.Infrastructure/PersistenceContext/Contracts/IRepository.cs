@@ -15,5 +15,4 @@ public interface IRepository
     public bool RemoveById<TEntity>(int key) where TEntity : class, IEntity;
 
     public bool Remove<TEntity>(TEntity entity) where TEntity : class, IEntity;
-
 }

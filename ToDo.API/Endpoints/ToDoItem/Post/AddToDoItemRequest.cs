@@ -7,7 +7,7 @@ public record AddToDoItemRequest(string Title, string Description)
     public AppAddToDoItemCommand GetAppAddToDoCommand() => new(Title, Description);
 }
 
-public record AddToDoItemRequestResult(int Id)
+public record AddToDoItemRequestResponse(int Id)
 {
-    public static AddToDoItemRequestResult FromId(int id) => new(id);
+    public static AddToDoItemRequestResponse FromId(int id) => new(id);
 }

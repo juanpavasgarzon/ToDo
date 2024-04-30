@@ -10,7 +10,7 @@ public class ToDoItem(string title, string description) : IEntity
 
     public string Description { get; } = description;
 
-    private DateTime CreatedAt { get; } = DateTime.Now;
+    public DateTime CreatedAt { get; } = DateTime.Now;
 
     public DateTime? CompletedAt { get; private set; }
 

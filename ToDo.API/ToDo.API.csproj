@@ -27,7 +27,6 @@
 
     <ItemGroup>
       <Folder Include="Endpoints\ToDoItem\Delete\" />
-      <Folder Include="Endpoints\ToDoItem\Get\" />
       <Folder Include="Endpoints\ToDoItem\Put\" />
     </ItemGroup>
 

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using ToDo.Application.Commands.Add;
 using ToDo.Infrastructure.CommandDispatcher.Contracts;
 using ToDo.Infrastructure.MinimalApi.Contracts;
+using ToDo.API.Enums;
 
 namespace ToDo.API.Endpoints.ToDoItem.Post;
 
@@ -10,11 +11,11 @@ public class AddToDoItemRequestHandler : IEndpoint
     public void Configure(IEndpointRouteBuilder endpoints)
     {
         endpoints.MapPost("/todo-item", Handle)
-            .WithTags("ToDo Item")
+            .WithTags(TagConstant.TodoItem)
             .WithOpenApi();
     }
 
-    private static Results<Created<AddToDoItemRequestResult>, Conflict<object>> Handle(
+    private static Results<Created<AddToDoItemRequestResponse>, Conflict<object>> Handle(
         ILogger<AddToDoItemRequestHandler> logger,
         ICommandDispatcher dispatcher,
         AddToDoItemRequest request
@@ -25,7 +26,7 @@ public class AddToDoItemRequestHandler : IEndpoint
             var result = dispatcher.Exec<AppAddToDoItemCommand, AppAddToDoItemCommandResponse>(
                 request.GetAppAddToDoCommand()
             );
-            return TypedResults.Created($"/todo-item/{result.Id}", AddToDoItemRequestResult.FromId(result.Id));
+            return TypedResults.Created($"/todo-item/{result.Id}", AddToDoItemRequestResponse.FromId(result.Id));
         }
         catch (Exception e)
         {

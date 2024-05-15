@@ -62,8 +62,9 @@ else
                     <div class="card-body">
                         @if (IsEditing && task.Id.Equals(ToDoId))
                         {
+                            <label for="completedNote" class="ms-1">Note</label>
                             <textarea class="form-control" @bind="task.CompletedNote" id="completedNote" rows="5"></textarea>
-                            <div class="d-flex justify-content-between mt-1">
+                            <div class="d-flex justify-content-between mt-2">
                                 <button class="btn hover-element btn-secondary w-100 me-1" @onclick="() => ToggleEdit(default)">Cancel</button>
                                 <button class="btn hover-element btn-primary w-100 ms-1" @onclick="() => Complete(task.CompletedNote)">Confirm</button>
                             </div>

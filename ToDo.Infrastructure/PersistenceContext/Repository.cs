@@ -46,11 +46,11 @@ public class Repository : IRepository
         return entity as TEntity;
     }
 
-    public List<TEntity> GetBy<TEntity>(Predicate<TEntity> predicate) where TEntity : class, IEntity
+    public List<TEntity> GetBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class, IEntity
     {
         var context = GetEntityContext<TEntity>();
-        var entities = context.FindAll((Predicate<IEntity>)predicate);
-        return entities.OfType<TEntity>().ToList();
+        var entities = context.OfType<TEntity>().Where(predicate);
+        return entities.ToList();
     }
 
     public List<TEntity> GetAll<TEntity>() where TEntity : class, IEntity

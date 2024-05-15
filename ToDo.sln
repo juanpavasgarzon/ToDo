@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Application", "ToDo.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Domain", "ToDo.Domain\ToDo.Domain.csproj", "{0BAE5FC3-9B26-48D3-92BC-E641D77EA9A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Front", "ToDo.Front\ToDo.Front.csproj", "{8089EBFE-39B9-414D-AFFA-DA7710391E2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,5 +37,9 @@ Global
 		{0BAE5FC3-9B26-48D3-92BC-E641D77EA9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BAE5FC3-9B26-48D3-92BC-E641D77EA9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BAE5FC3-9B26-48D3-92BC-E641D77EA9A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8089EBFE-39B9-414D-AFFA-DA7710391E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8089EBFE-39B9-414D-AFFA-DA7710391E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8089EBFE-39B9-414D-AFFA-DA7710391E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8089EBFE-39B9-414D-AFFA-DA7710391E2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

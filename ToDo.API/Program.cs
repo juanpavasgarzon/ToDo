@@ -1,3 +1,4 @@
+using ToDo.API.Workers;
 using ToDo.Infrastructure.CommandDispatcher;
 using ToDo.Infrastructure.MinimalApi;
 using ToDo.Infrastructure.QueryDispatcher;
@@ -14,6 +15,7 @@ builder.Services.AddQueries();
 builder.Services.AddEndpoints();
 builder.Services.AddRepository();
 builder.Logging.AddConsole();
+builder.Services.AddWorker();
 
 var app = builder.Build();
 

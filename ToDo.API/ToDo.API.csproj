@@ -25,9 +25,4 @@
       <ProjectReference Include="..\ToDo.Infrastructure\ToDo.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Endpoints\ToDoItem\Delete\" />
-      <Folder Include="Endpoints\ToDoItem\Put\" />
-    </ItemGroup>
-
 </Project>

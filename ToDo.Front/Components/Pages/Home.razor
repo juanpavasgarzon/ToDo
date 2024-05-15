@@ -1,0 +1,135 @@
+﻿@page "/"
+
+@using ToDo.Front.Dtos
+@using ToDo.Front.Services.Contracts
+
+@inject IToDoService ToDoService
+
+@rendermode InteractiveServer
+
+<style>
+    .hover-element:hover {
+        opacity: 60%;
+    }
+</style>
+
+<PageTitle>Home</PageTitle>
+
+<div class="d-flex justify-content-between">
+    <div>
+        <span class="rounded-circle bg-success d-inline-block" style="width: 15px; height: 15px;"></span>
+        <span class="ms-2">Completed</span>
+        <span class="rounded-circle bg-primary d-inline-block ms-2" style="width: 15px; height: 15px;"></span>
+        <span class="ms-2">Pending</span>
+    </div>
+    <div>
+        @if (IsCreating)
+        {
+            <button type="button" class="btn btn-outline-primary me-1" @onclick="Create">
+                Confirm
+            </button>
+        }
+        <button type="button" class="btn btn-outline-secondary ms-1" @onclick="ToggleCreate">
+            @(IsCreating ? "Cancel" : "New")
+        </button>
+    </div>
+</div>
+<hr/>
+
+@if (IsCreating)
+{
+    <label for="title">Title</label>
+    <input class="form-control mb-2" id="title" type="text" @bind="Title" required="required"/>
+    <label for="description">Description</label>
+    <textarea class="form-control" id="description" @bind="Description" rows="10" required="required"></textarea>
+}
+else if (!ToDoList.ToDoItems.Any())
+{
+    <div class="alert alert-info">
+        No Found ToDo Elements
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var task in ToDoList.ToDoItems)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <button class="btn hover-element border-bottom @(task.IsCompleted ? "text-decoration-line-through" : "")" disabled="@(task.IsCompleted || IsEditing)" @onclick="() => ToggleEdit(task.Id)">
+                        Complete
+                    </button>
+                    <div class="card-body">
+                        @if (IsEditing && task.Id.Equals(ToDoId))
+                        {
+                            <textarea class="form-control" @bind="task.CompletedNote" id="completedNote" rows="5"></textarea>
+                            <div class="d-flex justify-content-between mt-1">
+                                <button class="btn hover-element btn-secondary w-100 me-1" @onclick="() => ToggleEdit(default)">Cancel</button>
+                                <button class="btn hover-element btn-primary w-100 ms-1" @onclick="() => Complete(task.CompletedNote)">Confirm</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">@task.Title</h5>
+                                <div>
+                                    <span class="rounded-circle @(task.IsCompleted ? "bg-success" : "bg-primary") d-inline-block" style="width: 15px; height: 15px;"></span>
+                                </div>
+                            </div>
+                            <p class="card-text">@task.Description</p>
+                            <h5 class="card-title">Note</h5>
+                            <p class="card-text">@(!string.IsNullOrEmpty(task.CompletedNote) ? task.CompletedNote : "Without note")</p>
+                            <div class="d-flex justify-content-between">
+                                <small>Created: @task.CreatedAt.ToString("yyyy-MM-dd")</small>
+                                <small>Completed: @(task.IsCompleted ? task.CompletedAt?.ToString("yyyy-MM-dd") : "Pending")</small>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private ToDoDto ToDoList = new([]);
+    private bool IsCreating;
+    private bool IsEditing;
+    private int ToDoId;
+
+    private string Title = string.Empty;
+    private string Description = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ToDoList = await ToDoService.GetToDosAsync();
+    }
+
+    private void ToggleEdit(int id)
+    {
+        IsEditing = !IsEditing;
+        ToDoId = id;
+    }
+
+    private void ToggleCreate()
+    {
+        IsCreating = !IsCreating;
+        Title = string.Empty;
+        Description = string.Empty;
+    }
+
+    private async Task Create()
+    {
+        await ToDoService.Create(Title, Description);
+        ToDoList = await ToDoService.GetToDosAsync();
+        ToggleCreate();
+    }
+
+    private async Task Complete(string completedNote)
+    {
+        await ToDoService.Complete(ToDoId, completedNote);
+        ToDoList = await ToDoService.GetToDosAsync();
+        ToggleEdit(default);
+    }
+
+}

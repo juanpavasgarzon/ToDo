@@ -7,7 +7,7 @@ public class GetAllToDoItemQueryHandler(IRepository repository) : IQueryHandler<
 {
     public GetAllToDoItemQueryResponse Handle()
     {
-        var toDoItems = repository.GetAll<ToDoItem>();
+        var toDoItems = repository.GetAll<ToDoItem>().OrderBy(t => t.CreatedAt).ToList();
         return GetAllToDoItemQueryResponse.FromToDoItems(toDoItems);
     }
 }

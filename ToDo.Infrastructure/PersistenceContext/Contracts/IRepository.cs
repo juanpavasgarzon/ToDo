@@ -8,7 +8,7 @@ public interface IRepository
 
     public TEntity? GetById<TEntity>(int key) where TEntity : class, IEntity;
 
-    public List<TEntity> GetBy<TEntity>(Predicate<TEntity> predicate) where TEntity : class, IEntity;
+    public List<TEntity> GetBy<TEntity>(Func<TEntity, bool> predicate) where TEntity : class, IEntity;
 
     public List<TEntity> GetAll<TEntity>() where TEntity : class, IEntity;
 
